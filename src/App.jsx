@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './components/Login.jsx'
-import Register from './components/Register.jsx'
+import { Register } from './components/Register.jsx'
+import { Login } from './components/Login.jsx'
+import { DashBoard } from './components/DashBoard.jsx';
 
 function App() {
   return (
@@ -8,10 +9,10 @@ function App() {
       <BrowserRouter>
       <Routes>
         {/* Rutas de autenticación */}
-        <Route path="/login" element={<Login />} /> 
+        <Route path="/" element={<Login />} /> 
         <Route path="/register" element={<Register/>} />
-
-        {/* Ruta principal (después del login)<Route path="/dashboard" element={<DashboardScreen />} /> */}
+        <Route path='*' element={<p>Not found</p>} />
+        <Route path="/dashboard" element={<DashBoard />} />
       </Routes>
     </BrowserRouter>
     </>

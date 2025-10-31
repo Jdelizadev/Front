@@ -1,81 +1,121 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import './Styles.css'; // Importa los estilos CSS
+// Asegúrate de importar los mismos estilos del registro
+import './StylesLoginAndRegister.css'; 
+const API_LOGIN_URL = 'https://api-expressjs-production.up.railway.app/api/auth/login'
 
 const Login = () => {
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-  // Estados para el email y la contraseña
+  const navigate = useNavigate()
+
+  // Estados para el email y la contraseña (esto no cambia)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // Estado opcional para manejar errores
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
-  // Función que se ejecuta al enviar el formulario
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Evita el comportamiento por defecto de recargar la página
-
-    // Validación simple
+  // La función handleSubmit tampoco necesita cambios
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!email || !password) {
       setError('Por favor, ingresa tu email y contraseña.');
       return;
     }
-
-    // Aquí es donde harías la llamada a tu backend
-    // Por ejemplo, usando 'fetch' o 'axios'
     console.log('Intentando iniciar sesión con:', { email, password });
-    
+    setError(''); 
 
-    // Limpiar campos después del intento (opcional)
-    // setEmail('');
-    // setPassword('');
-    // setError(''); 
+    try {
+      const data = await fetch(API_LOGIN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      })
+
+      const response = await data.json()
+      const { token, userName } = response
+      console.log(response)
+      console.log(token, userName)
+
+            setEmail('');
+            setPassword('');
+      localStorage.setItem('jwt', token);
+      localStorage.setItem('userName', userName);
+      navigate('/dashboard', { replace: true})                  
+
+    } catch (error) {
+      console.log(error)
+      setError(error)
+    }
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2 className="login-title">Inicia sesión para ver tus citas</h2>
-        {error && <p className="error-message">{error}</p>}
-        
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="tu.email@ejemplo.com"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setError(''); // Limpia el error al empezar a escribir
-            }}
-            
-          />
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="********"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setError(''); // Limpia el error al empezar a escribir
-            }}
-          />
-        </div>
-        
-        <button type="submit" className="login-button">
-          Iniciar Sesión
-        </button>
+    // 1. Usa el contenedor principal de la página
+    <div className="register-page-container">
+      
+      {/* 2. Añade el ícono de fondo */}
+      <div className="gender-icon-background"></div>
 
-        <p className="register-text">
-          ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
-        </p>
-      </form>
+      {/* 3. Envuelve el formulario en la tarjeta principal */}
+      <div className="register-card">
+        <h1 className="text">Aquí comienza tu lugar seguro <br/> Agenda tu cita</h1>
+        <h1 className=".main-title">Accede</h1>
+
+        {/* 4. Usa la clase del título principal */}
+        <p className="text">Inicia sesión para continuar</p>
+
+        <form className="register-form" onSubmit={handleSubmit}>
+          {error && <p className="error-message">{error}</p>}
+          {message && <p className="success-message">{message}</p>}
+          
+          <div className="form-group">
+            {/* 5. Usa las clases correctas para label e input */}
+            <label className="input-label" htmlFor="email">Email</label>
+            <input
+              className="input-field"
+              type="email"
+              id="email"
+              placeholder="tu.email@ejemplo.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError('');
+              }}
+            />
+          </div>
+          
+          <div className="form-group">
+            {/* 5. Usa las clases correctas para label e input */}
+            <label className="input-label" htmlFor="password">Contraseña</label>
+            <input
+              className="input-field"
+              type="password"
+              id="password"
+              placeholder="********"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError('');
+              }}
+            />
+          </div>
+          
+          {/* 6. Usa la misma clase del botón de registro */}
+          <button type="submit" className="register-button">
+            Iniciar Sesión
+          </button>
+
+          {/* 7. Usa la misma clase para el texto del enlace */}
+          <p className="login-text">
+            ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default Login;
+export { Login };

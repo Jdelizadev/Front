@@ -1,128 +1,137 @@
-import { useState } from 'react';
+// src/components/Register.jsx
 import { Link } from 'react-router-dom';
-import './Styles.css'; // Reutilizamos los estilos oscuros del login
+import { useState } from 'react';
+import './StylesLoginAndRegister.css'; // Asegúrate de que la ruta sea correcta
+const API_REGISTER_URL = 'https://api-expressjs-production.up.railway.app/api/auth/register'
 
 const Register = () => {
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-  // Estados para los campos del formulario
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  // Estado para manejar mensajes (errores o éxito)
-  const [message, setMessage] = useState('');
-  const [isError, setIsError] = useState(false);
+    // Estados para los campos del formulario
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [fechaNacimiento, setFechaNacimiento] = useState('');
+    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
 
-  // Función que se ejecuta al enviar el formulario
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Evita el recargo de la página
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setMessage('');
+        if (!name || !email || !password) {
+            setError('Todos los campos son obligatorios.');
+            return;
+        }
+        console.log(API_REGISTER_URL)
+        try {
+            const data = await fetch(API_REGISTER_URL, {
+                method: 'POST', 
+                headers: {
+                        'Content-Type': 'application/json'
+                    },
+                body: JSON.stringify({
+                    name, 
+                    email, 
+                    password
+                })
+            })
 
-    // Validación simple
-    if (!name || !email || !password) {
-      setMessage('Por favor, completa todos los campos.');
-      setIsError(true);
-      return;
-    }
-    
-    // Validar longitud de la contraseña (ejemplo)
-    if (password.length < 6) {
-      setMessage('La contraseña debe tener al menos 6 caracteres.');
-      setIsError(true);
-      return;
-    }
+            if (!data.ok) {
+                const errorResponse = await data.json();
+                setError(errorResponse.message || `Error al registrar: Código ${data.status}. Verifica tu API.`);
+                return;
+            }
 
-    setMessage(''); // Limpiar mensajes
-    setIsError(false);
-    
-    // Aquí harías la llamada a tu backend para crear la cuenta
-    console.log('Intentando registrar usuario con:', { name, email, password });
-     
-    try {
-      const data = await fetch(API_BASE_URL, {
-        method: POST, 
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password })
-      })
+            const response = await data.json();
+            console.log("Registro exitoso:", response);
+            
+            // 2. LÓGICA CLAVE: LIMPIAR LOS DATOS AL TENER ÉXITO
+            setName('');
+            setEmail('');
+            setPassword('');
+            setFechaNacimiento('');
+            
+            // Mostrar mensaje de éxito
+            setMessage('¡Registro completado! Ya puedes iniciar sesión!');
 
-      const response = await data.json()
-      
-    } catch (error) {
-      
-    }
 
-    // Ejemplo de mensaje de éxito simulado
-    setMessage('Registro exitoso. ¡Bienvenido!');
-    // Limpiar campos después del intento (opcional)
-    // setName('');
-    // setEmail('');
-    // setPassword('');
-  };
+        } catch (error) {
+            console.error('Error de red o en la solicitud:', error);
+            setError('No se pudo conectar al servidor. Inténtalo de nuevo más tarde.');
+        }
+    };
 
-  return (
-    <div className="login-container"> {/* Reutilizamos el contenedor oscuro */}
-      <form className="login-form" onSubmit={handleSubmit}> {/* Reutilizamos el estilo del formulario */}
-        <h2 className="login-title">Crear Cuenta de Paciente</h2>
-        
-        {/* Muestra el mensaje condicionalmente */}
-        {message && (
-          <p className={isError ? "error-message" : "success-message"}>
-            {message}
-          </p>
-        )}
-        
-        <div className="form-group">
-          <label htmlFor="name">Nombre Completo</label>
-          <input
-            type="text"
-            id="name"
-            placeholder="Juan Pérez"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              setMessage(''); 
-            }}
-          />
+    return (
+        // 1. Contenedor principal que centra todo
+        <div className="register-page-container">
+            
+            {/* 2. El ícono que va en el fondo */}
+            <div className="gender-icon-background"></div>
+
+            {/* 3. La tarjeta que contiene el formulario */}
+            <div className="register-card">
+                <h1 className="main-title">
+                    Crear una cuenta nueva para empezar a agendar
+                </h1>
+
+                <form className="register-form" onSubmit={handleSubmit}>
+                    {error && <p className="error-message">{error}</p>}
+                    {message && <p className="success-message">{message}</p>}
+
+                    <div className="form-group">
+                        <label className="input-label" htmlFor="name">Nombre</label>
+                        <input
+                            type="text"
+                            id="name"
+                            className="input-field"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="input-label" htmlFor="email">Correo Electrónico</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="input-field"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="input-label" htmlFor="password">Contraseña</label>
+                        <input
+                            type="password"
+                            id="password"
+                            className="input-field"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="input-label" htmlFor="birthdate">Fecha de Nacimiento</label>
+                        <input
+                            type="date" // Usar type="date" es más práctico
+                            id="birthdate"
+                            className="input-field"
+                            value={fechaNacimiento}
+                            onChange={(e) => setFechaNacimiento(e.target.value)}
+                        />
+                    </div>
+
+                    <button type="submit" className="register-button">
+                        Registrarse
+                    </button>
+                </form>
+
+                <p className="login-text">
+                    ¿Ya estás registrado? <Link to="/">Accede</Link>
+                </p>
+            </div>
         </div>
-
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="tu.email@ejemplo.com"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setMessage('');
-            }}
-          />
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Mínimo 6 caracteres"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setMessage(''); 
-            }}
-          />
-        </div>
-        
-        <button type="submit" className="login-button">
-          Registrarse
-        </button>
-
-        <p className="register-text">
-          ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
-        </p>
-      </form>
-    </div>
-  );
+    );
 };
 
-export default Register;
+export  { Register };
