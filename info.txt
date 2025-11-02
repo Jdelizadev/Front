@@ -1,0 +1,1 @@
+Basicamente react router sirve para hacer una navegacion mas sencilla en tu aplicacion, sin importar la estructura o el renderizado que le quieras dar, entonces estos router y paths, definen que componentes deseas mostrar en cada pantalla y los muestra

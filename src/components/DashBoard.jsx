@@ -1,6 +1,7 @@
 import React from 'react';
-//import UpcomingAppointments from './UpcomingAppointments'; // Lo crearías después
-//import WeeklyAvailability from './WeeklyAvailability';   // Lo crearías después
+import { UpcomingAppointments } from './UpcomingAppointments'
+import { WeeklyAvailability } from './WeeklyAvailability';   
+// Lo crearías después
 import './Dashboard.css'; // Importa tus estilos
 import { capitalizeName } from './Tools';
 
@@ -38,13 +39,13 @@ const DashBoard = () => {
           {/* Tarjeta 1: Próximas Citas (Componente que usará tu JWT) */}
           <section className="card appointments-section">
             <h2 className="section-title">Próximas Citas Propias</h2>
-           {/*  <UpcomingAppointments /> */}
+           <UpcomingAppointments />
           </section>
 
           {/* Tarjeta 2: Disponibilidad Semanal */}
           <section className="card availability-section">
             <h2 className="section-title">Disponibilidad de la Semana</h2>
-          {/*  <WeeklyAvailability /> */}
+          <WeeklyAvailability />
           </section>
           
           {/* Tarjeta 3: Historial / Mensajes */}

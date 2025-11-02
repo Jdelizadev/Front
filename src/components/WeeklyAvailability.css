@@ -1,0 +1,86 @@
+/* WeeklyAvailability.css (Actualizado) */
+
+.weekly-availability-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.day-summary-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--card-bg);
+}
+
+.day-toggle-btn {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.day-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.available-count {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Colores de estado */
+.day-toggle-btn.available {
+    background-color: #e6f7eb; /* Fondo verde muy claro */
+    color: var(--secondary-color);
+}
+
+.day-toggle-btn.available:hover {
+    background-color: #d4edda;
+}
+
+.day-toggle-btn.booked {
+    background-color: #f8f9fa; /* Gris claro */
+    color: var(--light-text);
+    cursor: default;
+    opacity: 0.7;
+}
+
+/* Contenido Expandido */
+.available-blocks-list {
+    padding: 10px 15px;
+    border-top: 1px solid var(--border-color);
+    background-color: #ffffff;
+}
+
+.time-block-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.schedule-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s;
+}
+
+.schedule-btn:hover {
+    background-color: #0056b3;
+}

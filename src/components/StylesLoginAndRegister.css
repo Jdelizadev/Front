@@ -1,0 +1,188 @@
+/* --- AJUSTE UNIVERSAL --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* --- ESTILOS GENERALES Y VARIABLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+:root {
+    --color-pink-light: #FFB3D4;
+    --color-purple-light: #C0A9FF;
+    --color-text-dark: #333333;
+    --color-text-light: #5A5A5A;
+    --color-input-bg: #F9F0FF;
+    --color-button-start: #9B51E0;
+    --color-button-end: #F06292;
+    --color-white: #FFFFFF;
+    --color-icon-bg: #E0E0E0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-white); 
+    color: var(--color-text-dark);
+}
+
+/* --- CONTENEDOR PRINCIPAL DE LA PÁGINA --- */
+.register-page-container {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header con Degradado */
+.register-page-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(90deg, var(--color-purple-light) 0%, var(--color-pink-light) 100%);
+    z-index: 0;
+}
+
+/* Ícono de Género de Fondo */
+.gender-icon-background {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 550px;
+    height: 550px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath fill='%23E0E0E0' d='M288 32c-8.1 0-16.1 1-23.8 3c-11.2 3-21.4 8.2-30.2 15.2c-17.7 14-29 35.1-29 57.8V160H160c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64h48v32c0 13.2 5.4 25.2 14.1 33.9c-24.3 15.9-42.3 40.4-49.8 68.1H160c-17.7 0-32 14.3-32 32s14.3 32 32 32h50.5c3.2 28.3 16.2 53.4 35.4 72.6c19.2 19.2 44.3 32.2 72.1 35.4V496c0 8.8 7.2 16 16 16s16-7.2 16-16v-14.5c27.8-3.2 52.9-16.2 72.1-35.4c19.2-19.2 32.2-44.3 35.4-72.6H416c17.7 0 32-14.3 32-32s-14.3-32-32-32h-52.2c-7.5-27.7-25.5-52.2-49.8-68.1c8.7-8.7 14.1-20.7 14.1-33.9v-32h48c35.3 0 64-28.7 64-64v-32c0-35.3-28.7-64-64-64H352V108c0-22.7-11.3-43.8-29-57.8C314.2 43.2 304 38 292.8 35C284.9 33 276.9 32 272 32zm0 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64zM128 224a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.5;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* --- FORMULARIO Y TARJETA --- */
+.register-card {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: 400px; /* Más angosto */
+    padding: 20px 25px; /* Reducido */
+    background-color: var(--color-white);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.main-title {
+    font-size: 1.6em; /* Reducido */
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 20px; /* Reducido */
+    color: var(--color-text-dark);
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Reducido */
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Reducido */
+}
+
+.input-label {
+    font-size: 0.7em;
+    font-weight: 700;
+    color: var(--color-text-light);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.text {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.input-field {
+    width: 100%;
+    padding: 9px 15px; /* Reducido */
+    background-color: var(--color-input-bg);
+    border: 1px solid transparent;
+    border-radius: 7px; /* Un poco más sutil */
+    font-size: 0.9em; /* Reducido */
+    color: var(--color-text-dark);
+    transition: all 0.2s ease-in-out;
+}
+
+.input-field::placeholder {
+    color: #A396A6;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--color-purple-light);
+    background-color: var(--color-white);
+    box-shadow: 0 0 0 3px rgba(192, 169, 255, 0.4);
+}
+
+/* --- BOTÓN Y ENLACES --- */
+.register-button {
+    background: linear-gradient(90deg, var(--color-button-start) 0%, var(--color-button-end) 100%);
+    color: var(--color-white);
+    padding: 10px 20px; /* Reducido */
+    border: none;
+    border-radius: 7px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px; /* Reducido */
+    box-shadow: 0 4px 12px rgba(155, 81, 224, 0.3);
+}
+
+.register-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(155, 81, 224, 0.4);
+}
+
+.login-text {
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--color-text-dark);
+    margin-top: 15px; /* Reducido */
+}
+
+.login-text a {
+    color: var(--color-button-start);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.login-text a:hover {
+    text-decoration: underline;
+}
+
+/* --- ESTILOS RESPONSIVE --- */
+@media (max-width: 768px) {
+    .gender-icon-background {
+        display: none; /* Ocultamos el ícono en pantallas muy pequeñas */
+    }
+
+    .register-card {
+        padding: 25px;
+        width: 90%;
+    }
+
+    .main-title {
+        font-size: 1.8em;
+    }
+}
