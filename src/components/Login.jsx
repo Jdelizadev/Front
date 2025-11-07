@@ -35,15 +35,20 @@ const Login = () => {
         })
       })
 
+      if (data.status == 400) {
+        setError('Usuario no registrado');
+        return;
+      }
       const response = await data.json()
-      const { token, userName } = response
       console.log(response)
-      console.log(token, userName)
+      const { token, userName, userID } = response
+      console.log(token, userName, userID)
 
             setEmail('');
             setPassword('');
       localStorage.setItem('jwt', token);
       localStorage.setItem('userName', userName);
+      localStorage.setItem('userID', userID);
       navigate('/dashboard', { replace: true})                  
 
     } catch (error) {
@@ -76,7 +81,7 @@ const Login = () => {
             <label className="input-label" htmlFor="email">Email</label>
             <input
               className="input-field"
-              type="email"
+              type='text'
               id="email"
               placeholder="tu.email@ejemplo.com"
               value={email}

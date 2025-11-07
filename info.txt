@@ -1,1 +1,9 @@
 Basicamente react router sirve para hacer una navegacion mas sencilla en tu aplicacion, sin importar la estructura o el renderizado que le quieras dar, entonces estos router y paths, definen que componentes deseas mostrar en cada pantalla y los muestra
+
+
+Pendientes por arreglar de la aplicacion:
+Mostrar la lista de citas disponibles por dia, ya que por ahora no muestra correctamente cuales horas quedan disponibles por dia.
+Tambien hay que hacer para que sin importar de la pantalla en la que entres, no te permita usar la flecha para regresar la ventana
+Asi mismo falta crear la logica para comprobar que la contraseña, el correo y el usuario cumplan con un formato mas especifico para cuidar que no haya datos incorrectos en la base de datos
+
+
