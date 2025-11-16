@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react';
 import { XCircle, Calendar, Clock, Loader } from 'lucide-react';
-import './Appointments.css'; 
+import './Appointments.css'; // Mantenemos tu CSS original
 
 // Obtener el ID del usuario y configurar URLs
 const userID = localStorage.getItem('userID'); 
 const API_URL = `https://api-expressjs-production.up.railway.app/api/users/${userID}/appointments`; 
 const API_RESERVATION_URL = 'https://api-expressjs-production.up.railway.app/api/reservations'; 
 
-// 🔑 CLAVE: Usamos React.forwardRef para exponer la función de recarga al componente padre
 const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => {
     const [appointments, setAppointments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [statusMessage, setStatusMessage] = useState({ show: false, message: '', type: '' });
+    // Eliminamos el estado: [confirmCancelId, setConfirmCancelId]
 
-    // --- Funciones de Utilidad (formatTime, formatDate, StatusMessage se mantienen) ---
+    // --- Funciones de Utilidad ---
     const formatTime = (timeBlockStart) => {
         try {
             const date = new Date(`2000-01-01T${timeBlockStart}`);
@@ -22,27 +22,47 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
         } catch (e) { return 'N/A'; }
     };
 
+    /**
+     * ✅ FIX DE FECHA MANTENIDO: Extrae solo la parte de la fecha y usa T12:00:00.
+     */
     const formatDate = (dateString, options) => {
-        return new Date(dateString).toLocaleDateString('es-ES', options);
+        if (!dateString || typeof dateString !== 'string') {
+            return 'N/A';
+        }
+        
+        try {
+            // Extraer solo la parte de la fecha antes de la 'T'
+            const datePart = dateString.split('T')[0]; 
+
+            // Construir la fecha con el FIX del mediodía para prevenir retroceso por UTC
+            const safeDate = new Date(datePart + 'T12:00:00'); 
+            
+            if (isNaN(safeDate.getTime())) {
+                return 'N/A'; 
+            }
+            return safeDate.toLocaleDateString('es-ES', options);
+        } catch (e) {
+            return 'N/A';
+        }
     };
 
     const StatusMessage = ({ status }) => {
         if (!status.show) return null;
         let classes, Icon;
+        // NOTA: Se usan clases genéricas, el estilo final dependerá de Appointments.css
         if (status.type === 'loading') { classes = "status-loading text-gray-800"; Icon = Loader; } 
         else if (status.type === 'success') { classes = "status-success"; Icon = XCircle; } 
         else if (status.type === 'error') { classes = "status-error"; Icon = XCircle; }
 
         return (
-            <div className={`status-message p-4 rounded-xl shadow-2xl z-50 flex items-center space-x-3 text-white ${classes}`}>
+            <div className={`status-message fixed top-5 left-1/2 -translate-x-1/2 p-4 rounded-xl shadow-2xl z-50 flex items-center space-x-3 text-white ${classes}`}>
                 {status.type === 'loading' ? (<Icon className="w-5 h-5 animate-spin" />) : (<Icon className="w-6 h-6" />)}
                 <span>{status.message}</span>
             </div>
         );
     };
 
-    // --- 1. Fetch de Citas (Expuesta) ---
-    const fetchAppointments = async () => {
+    const fetchAppointments = useCallback(async () => {
         const token = localStorage.getItem('jwt'); 
         
         if (!userID || isNaN(parseInt(userID, 10)) || !token) {
@@ -68,18 +88,23 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [userID]);
     
-    // 🔑 CLAVE: Exponer fetchAppointments al componente DashBoard
+    // Exponer fetchAppointments al componente DashBoard
     useImperativeHandle(ref, () => fetchAppointments, [fetchAppointments]);
 
     useEffect(() => {
         fetchAppointments();
-    }, []);
+    }, [fetchAppointments]);
 
-    // --- 2. Cancelación de Cita (Notifica la Recarga) ---
+
+    /**
+     * ✅ DEVOLUCIÓN DE window.confirm
+     */
     const handleCancel = async (id) => {
-        if (!window.confirm("¿Estás seguro de que quieres cancelar esta cita?")) { return; }
+        if (!window.confirm("¿Estás seguro de que quieres cancelar esta cita?")) { 
+            return; 
+        }
         
         setStatusMessage({ show: true, message: 'Cancelando cita...', type: 'loading' });
         const token = localStorage.getItem('jwt'); 
@@ -93,11 +118,9 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
             if (response.status === 204) {
                 setStatusMessage({ show: true, message: 'Cita cancelada con éxito.', type: 'success' });
                 
-                // 🔑 CLAVE: Llamar a la función global de sincronización
                 if (onAppointmentChange) {
                     await onAppointmentChange(); 
                 } else {
-                    // Fallback: Recargar solo esta vista si no está sincronizado
                     await fetchAppointments(); 
                 }
             } else if (!response.ok) {
@@ -111,6 +134,7 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
             setTimeout(() => setStatusMessage({ show: false, message: '', type: '' }), 5000);
         }
     };
+
 
     // --- 3. Renderizado ---
     if (isLoading) { /* ... */ } // Renderizado de carga
@@ -147,7 +171,7 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
 
                             <button 
                                 className="cancel-btn"
-                                onClick={() => handleCancel(cita.id)}
+                                onClick={() => handleCancel(cita.id)} // Usamos la función original que llama a window.confirm
                                 title="Cancelar Cita"
                             >
                                 <XCircle size={24} />
