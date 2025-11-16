@@ -11,8 +11,8 @@ function App() {
         {/* Rutas de autenticación */}
         <Route path="/" element={<Login />} /> 
         <Route path="/register" element={<Register/>} />
-        <Route path='*' element={<p>Not found</p>} />
         <Route path="/dashboard" element={<DashBoard />} />
+        <Route path='*' element={<p>Not found</p>} />
       </Routes>
     </BrowserRouter>
     </>
