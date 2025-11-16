@@ -67,7 +67,7 @@ const Login = () => {
 
       {/* 3. Envuelve el formulario en la tarjeta principal */}
       <div className="register-card">
-        <h1 className="text">Aquí comienza tu lugar seguro <br/> Agenda tu cita</h1>
+        <h1 className="text">Aquí comienza tu lugar seguro <br/></h1>
         <h1 className=".main-title">Accede</h1>
 
         {/* 4. Usa la clase del título principal */}

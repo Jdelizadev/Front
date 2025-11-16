@@ -83,7 +83,7 @@ body {
     font-weight: 800;
     line-height: 1.25;
     margin-bottom: 20px; /* Reducido */
-    color: var(--color-text-dark);
+    color: var(--color-button-end);
 }
 
 .register-form {
@@ -183,6 +183,6 @@ body {
     }
 
     .main-title {
-        font-size: 1.8em;
+        font-size: 1.6em;
     }
 }
