@@ -1,22 +1,29 @@
-import React, { useRef, useMemo } from 'react';
-// Asegúrate de que los componentes UpcomingAppointments y WeeklyAvailability
-// estén envueltos en React.forwardRef en sus respectivos archivos.
-import { UpcomingAppointments } from './UpcomingAppointments'
+import React, { useRef, useCallback, useState } from 'react';
+import { UpcomingAppointments } from './UpcomingAppointments';
 import { WeeklyAvailability } from './WeeklyAvailability'; 
-import './Dashboard.css'; // Importa tus estilos
+import './Dashboard.css';
 import { capitalizeName } from './Tools';
+
+// Definición de las posibles vistas
+const VIEWS = {
+    MAIN: 'main',
+    SCHEDULE: 'schedule'
+};
 
 const DashBoard = () => {
     // Simulación de datos del usuario
     const n = localStorage.getItem('userName');
     const userName = capitalizeName(n);
 
+    // 💡 CLAVE: Estado para controlar la vista actual
+    const [activeView, setActiveView] = useState(VIEWS.MAIN);
+
     // 1. Crear Referencias para las funciones de recarga de los hijos
     const weeklyAvailabilityRef = useRef(null);
     const upcomingAppointmentsRef = useRef(null);
     
     // 2. Definir la Función Global de Sincronización (Mediador)
-    const handleGlobalDataChange = async () => {
+    const handleGlobalDataChange = useCallback(async () => {
         console.log("-> Sincronización global iniciada (Agenda/Citas).");
         
         // Ejecutar las funciones de recarga expuestas por los componentes hijos
@@ -31,58 +38,95 @@ const DashBoard = () => {
         // Esperar a que ambas recargas (API calls) terminen
         await Promise.all([reloadWeekly, reloadAppointments]);
         
+        // Si agendamos una cita, volvemos a la vista principal
+        if (activeView === VIEWS.SCHEDULE) {
+            setActiveView(VIEWS.MAIN);
+        }
+        
         console.log("-> Sincronización completa.");
+    }, [activeView]);
+
+    // Función para cambiar de vista a Agendar Cita
+    const handleNavigateToSchedule = () => {
+        setActiveView(VIEWS.SCHEDULE);
     };
+
+    // Función para volver a la vista principal
+    const handleNavigateToMain = () => {
+        setActiveView(VIEWS.MAIN);
+    };
+
+    // --- Contenido de las Vistas ---
+
+    const MainDashboardView = (
+        <div className="content-grid">
+            {/* Tarjeta 1: Próximas Citas */}
+            <section className="card appointments-section">
+                <h2 className="section-title">Próximas Citas</h2>
+                <UpcomingAppointments 
+                    onAppointmentChange={handleGlobalDataChange} 
+                    ref={upcomingAppointmentsRef}
+                />
+            </section>
+
+            {/* Tarjeta 2: Historial / Mensajes (Ahora ocupa el espacio derecho) */}
+            <section className="card history-section-right">
+                <h2 className="section-title">Historial de Citas</h2>
+                <p>Aquí irá la lista de tus citas pasadas.</p>
+            </section>
+
+            {/* NOTA: WeeklyAvailability ya no está aquí */}
+        </div>
+    );
+
+    const ScheduleView = (
+        <section className="card full-width-schedule">
+            <h2 className="section-title">📅 Agendar Nueva Cita</h2>
+            <WeeklyAvailability 
+                onAppointmentChange={handleGlobalDataChange} 
+                ref={weeklyAvailabilityRef}
+            />
+        </section>
+    );
+
 
     return (
         <div className="dashboard-container">
             {/* 1. Barra Lateral - Sidebar */}
             <aside className="dashboard-sidebar">
-                <h2 className="sidebar-title">👋 Hola, {userName}</h2>
+                <div style={{ paddingLeft: '10px' }}>
+                    <h2 className="sidebar-title">👋 Hola, {userName}</h2>
+                </div>
                 
                 <nav className="sidebar-nav">
-                    <button className="nav-item active">📅 Mis Citas</button>
+                    {/* Opción 1: Mis Citas (Home) */}
+                    <button 
+                        className={`nav-item ${activeView === VIEWS.MAIN ? 'active' : ''}`}
+                        onClick={handleNavigateToMain}
+                    >
+                        📅 Mis Citas
+                    </button>
+                    
+                    {/* ✅ Opción 2: Agendar Nueva Cita (Navega a la otra vista) */}
+                    <button 
+                        className={`nav-item nav-item-schedule ${activeView === VIEWS.SCHEDULE ? 'active' : ''}`}
+                        onClick={handleNavigateToSchedule}
+                    >
+                        ✨ Agendar Nueva Cita
+                    </button>
+                    
+                    {/* Otras Opciones */}
                     <button className="nav-item">⚙️ Configuración</button>
                     <button className="nav-item logout">🚪 Cerrar Sesión</button>
                 </nav>
-
-                <button className="new-appointment-btn">
-                    ✨ Agendar Nueva Cita
-                </button>
             </aside>
 
             {/* 2. Área de Contenido Principal */}
             <main className="dashboard-content">
                 <h1>Panel Principal de Citas</h1>
                 
-                <div className="content-grid">
-                    
-                    {/* Tarjeta 1: Próximas Citas */}
-                    <section className="card appointments-section">
-                        <h2 className="section-title">Próximas Citas</h2>
-                        {/* 💡 CLAVE: Pasamos la función de sincronización y la Ref al componente */}
-                        <UpcomingAppointments 
-                            onAppointmentChange={handleGlobalDataChange} 
-                            ref={upcomingAppointmentsRef}
-                        />
-                    </section>
-
-                    {/* Tarjeta 2: Disponibilidad Semanal */}
-                    <section className="card availability-section">
-                        <h2 className="section-title">Disponibilidad de la Semana</h2>
-                        {/* 💡 CLAVE: Pasamos la función de sincronización y la Ref al componente */}
-                        <WeeklyAvailability 
-                            onAppointmentChange={handleGlobalDataChange} 
-                            ref={weeklyAvailabilityRef}
-                        />
-                    </section>
-                    
-                    {/* Tarjeta 3: Historial / Mensajes */}
-                    <section className="card history-section">
-                        <h2 className="section-title">Historial de Citas</h2>
-                        <p>Aquí irá la lista de tus citas pasadas.</p>
-                    </section>
-                </div>
+                {/* Renderizado condicional de la vista */}
+                {activeView === VIEWS.MAIN ? MainDashboardView : ScheduleView}
             </main>
         </div>
     );

@@ -1,10 +1,9 @@
-
-/* Dashboard.css (Corregido y optimizado para coincidir con la imagen) */
+/* Dashboard.css (Completo y optimizado) */
 
 /* --- Variables (Ajustadas para la consistencia de la imagen) --- */
 :root {
     --primary-color: #6A1B9A; /* Púrpura de títulos y navegación activa (como la imagen) */
-    --accent-color: #F06292; /* Rosa para el botón de acción principal (como la imagen) */
+    --accent-color: #F06292; /* Rosa para el botón de acción principal */
     --secondary-color: #6c757d; /* Gris para texto y bordes */
     --background-light: #f4f7f9; /* Fondo gris muy claro */
     --background-dark: #ffffff; /* Fondo de tarjetas/sidebar */
@@ -18,13 +17,13 @@
     display: flex;
     min-height: 100vh;
     background-color: var(--background-light);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más moderna */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* 1. Barra Lateral - Sidebar */
 .dashboard-sidebar {
     width: 250px;
-    padding: 20px 0 20px 20px; /* Padding a la derecha para simular el corte */
+    padding: 20px 0 20px 20px;
     background-color: var(--background-dark);
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -33,15 +32,15 @@
 
 .sidebar-title {
     color: var(--primary-color);
-    font-size: 1.6rem; /* Un poco más grande para el "Hola, Jaime Luis" */
+    font-size: 1.6rem;
     margin-bottom: 25px;
-    padding-left: 10px; /* Alineación con los botones de nav */
+    padding-left: 10px;
 }
 
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    margin-bottom: 30px; /* Espacio antes del botón de acción */
+    margin-bottom: 30px;
 }
 
 .nav-item {
@@ -54,31 +53,48 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    border-radius: 6px 0 0 6px; /* Para que la curva se vea solo al final de la línea */
+    border-radius: 6px 0 0 6px;
+    white-space: nowrap; /* Evita que el texto se rompa */
 }
 
-/* Estilo activo/hover ajustado a la imagen */
+/* Estilo activo/hover */
 .nav-item:hover, .nav-item.active {
     background-color: var(--primary-color);
     color: var(--background-dark);
     font-weight: 600;
 }
 
+/* Estilo específico para la opción de Agendar Cita */
+.nav-item-schedule {
+    background-color: var(--accent-color) !important;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 8px; /* Hace que el botón sea un bloque */
+    padding: 12px 10px;
+    margin: 15px 0 15px 0; /* Separación vertical en el menú */
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(240, 98, 146, 0.3);
+}
+
+.nav-item-schedule:hover, .nav-item-schedule.active {
+    background-color: #d84382 !important; /* Rosa oscuro */
+    color: white !important;
+}
+
 .nav-item.logout {
-    margin-top: 15px; /* Separación del resto de navs */
+    margin-top: 15px;
     color: var(--secondary-color);
     padding-top: 15px;
 }
 
 .nav-item.logout:hover {
-    background-color: #dc3545; /* Rojo de salida */
+    background-color: #dc3545;
     color: white;
 }
 
-/* Botón de Nueva Cita (Action Button) */
+/* Botón de Nueva Cita (Action Button) - Manteniendo la definición aunque ya no se use al final del sidebar */
 .new-appointment-btn {
     padding: 15px;
-    /* --- CORRECCIÓN: Usar el color rosa del diseño original --- */
     background-color: var(--accent-color); 
     color: white;
     border: none;
@@ -88,13 +104,12 @@
     cursor: pointer;
     transition: background-color 0.3s;
     text-align: center;
-    /* Se posiciona al final usando flex */
-    margin-top: auto; 
+    margin-top: auto; /* Mantener por si se quiere volver a usar en el flujo original */
     box-shadow: 0 4px 6px rgba(240, 98, 146, 0.3);
 }
 
 .new-appointment-btn:hover {
-    background-color: #d84382; /* Rosa un poco más oscuro */
+    background-color: #d84382;
 }
 
 /* 2. Área de Contenido Principal */
@@ -112,8 +127,8 @@
 
 /* Distribución de Contenido con Grid */
 .content-grid {
+    /* La vista principal (Mis Citas) usa 2/3 para citas y 1/3 para historial */
     display: grid;
-    /* La estructura clave: Main Panel (2/3) y Side Panel (1/3) */
     grid-template-columns: 2fr 1fr; 
     gap: 25px; 
 }
@@ -124,12 +139,10 @@
     padding: 25px;
     border-radius: 10px;
     box-shadow: var(--shadow-light);
-    /* min-height ya no es necesario si tienes contenido */
 }
 
 .section-title {
     color: var(--primary-color);
-    /* Ajustado para una línea más sutil como en la imagen */
     border-bottom: 1px solid var(--border-color); 
     padding-bottom: 10px;
     margin-bottom: 20px;
@@ -137,9 +150,17 @@
     font-weight: 600;
 }
 
-/* Historial se extiende a lo ancho debajo de todo */
-.history-section {
-    grid-column: span 2; 
+/* Vistas Específicas */
+
+/* Historial que ocupa la columna derecha (1/3) en la vista principal */
+.history-section-right {
+    /* Esto sobreescribe la regla .history-section original si existiera */
+    grid-column: span 1; 
+}
+
+/* Estilo para la vista de Agendamiento que ocupa todo el ancho */
+.full-width-schedule {
+    grid-column: span 2; /* Ocupa las dos columnas */
 }
 
 /* --- Media Queries (Móvil) --- */
@@ -154,7 +175,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 15px 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Sombra inferior */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
     .sidebar-title {
@@ -180,7 +201,7 @@
         gap: 20px;
     }
     
-    .history-section {
+    .history-section-right, .full-width-schedule {
         grid-column: span 1;
     }
 }
