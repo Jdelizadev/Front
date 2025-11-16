@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import './StylesLoginAndRegister.css'; // Asegúrate de que la ruta sea correcta
-const API_REGISTER_URL = 'https://api-expressjs-production.up.railway.app/api/auth/register'
+const API_REGISTER_URL = import.meta.env.VITE_API_URL + '/auth/register'
 
 const Register = () => {
     // Estados para los campos del formulario

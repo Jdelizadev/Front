@@ -2,7 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 // Asegúrate de importar los mismos estilos del registro
 import './StylesLoginAndRegister.css'; 
-const API_LOGIN_URL = 'https://api-expressjs-production.up.railway.app/api/auth/login'
+
+const API_LOGIN_URL = import.meta.env.VITE_API_URL + '/auth/login' 
 
 const Login = () => {
   const navigate = useNavigate()

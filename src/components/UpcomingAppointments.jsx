@@ -4,8 +4,8 @@ import './Appointments.css'; // Mantenemos tu CSS original
 
 // Obtener el ID del usuario y configurar URLs
 const userID = localStorage.getItem('userID'); 
-const API_URL = `https://api-expressjs-production.up.railway.app/api/users/${userID}/appointments`; 
-const API_RESERVATION_URL = 'https://api-expressjs-production.up.railway.app/api/reservations'; 
+const API_URL = import.meta.env.VITE_API_URL + `/users/${userID}/appointments`; 
+const API_RESERVATION_URL = import.meta.env.VITE_API_URL + '/reservations'; 
 
 const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => {
     const [appointments, setAppointments] = useState([]);

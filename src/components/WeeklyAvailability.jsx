@@ -3,9 +3,9 @@ import { Clock, Calendar, CheckCircle, XCircle, ChevronDown, ChevronUp, Loader }
 import './WeeklyAvailability.css'; 
 
 // URL para obtener la disponibilidad semanal
-const API_AVAILABILITY_URL = 'https://api-expressjs-production.up.railway.app/api/availability/semana'; 
+const API_AVAILABILITY_URL = import.meta.env.VITE_API_URL + '/availability/semana'; 
 // URL para crear la reserva
-const API_RESERVATION_URL = 'https://api-expressjs-production.up.railway.app/api/reservations'; 
+const API_RESERVATION_URL = import.meta.env.VITE_API_URL + '/reservations'; 
 
 const dayMap = { 0: 'Dom', 1: 'Lun', 2: 'Mar', 3: 'Mié', 4: 'Jue', 5: 'Vie', 6: 'Sáb' };
 
