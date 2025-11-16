@@ -86,7 +86,7 @@ body {
     color: #F06292;
 }
 
-.register-form {
+.register-form {    
     display: flex;
     flex-direction: column;
     gap: 10px; /* Reducido */
