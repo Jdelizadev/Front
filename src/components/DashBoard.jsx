@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useState } from 'react';
 import { UpcomingAppointments } from './UpcomingAppointments';
 import { WeeklyAvailability } from './WeeklyAvailability'; 
-import './Dashboard.css';
+import './DashBoard.css';
 import { capitalizeName } from './Tools';
 
 // Definición de las posibles vistas
