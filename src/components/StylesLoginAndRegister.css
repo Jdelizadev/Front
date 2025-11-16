@@ -78,7 +78,7 @@ body {
     text-align: center;
 }
 
-.main-title {
+#main-title {
     font-size: 1.6em; /* Reducido */
     font-weight: 800;
     line-height: 1.25;
