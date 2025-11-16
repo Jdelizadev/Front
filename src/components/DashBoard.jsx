@@ -3,6 +3,7 @@ import { UpcomingAppointments } from './UpcomingAppointments';
 import { WeeklyAvailability } from './WeeklyAvailability'; 
 import './DashBoard.css';
 import { capitalizeName } from './Tools';
+import { useNavigate } from 'react-router-dom';
 
 // Definición de las posibles vistas
 const VIEWS = {
@@ -11,6 +12,8 @@ const VIEWS = {
 };
 
 const DashBoard = () => {
+
+    const navigate = useNavigate()
     // Simulación de datos del usuario
     const n = localStorage.getItem('userName');
     const userName = capitalizeName(n);
@@ -50,6 +53,10 @@ const DashBoard = () => {
     const handleNavigateToSchedule = () => {
         setActiveView(VIEWS.SCHEDULE);
     };
+
+    const logout = () => {
+        navigate('/', {replace: true})
+    }
 
     // Función para volver a la vista principal
     const handleNavigateToMain = () => {
@@ -117,7 +124,7 @@ const DashBoard = () => {
                     
                     {/* Otras Opciones */}
                     <button className="nav-item">⚙️ Configuración</button>
-                    <button className="nav-item logout">🚪 Cerrar Sesión</button>
+                    <button onClick={logout} className="nav-item logout">🚪 Cerrar Sesión</button>
                 </nav>
             </aside>
 
