@@ -1,3 +1,4 @@
+
 /* Dashboard.css (Completo y optimizado) */
 
 /* --- Variables (Ajustadas para la consistencia de la imagen) --- */
@@ -154,7 +155,6 @@
 
 /* Historial que ocupa la columna derecha (1/3) en la vista principal */
 .history-section-right {
-    /* Esto sobreescribe la regla .history-section original si existiera */
     grid-column: span 1; 
 }
 
@@ -171,29 +171,66 @@
 
     .dashboard-sidebar {
         width: 100%;
-        flex-direction: row; 
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 20px;
+        /* Quitamos flex-direction: row y lo dejamos como columna */
+        flex-direction: column; 
+        align-items: center; /* Centra el contenido en el sidebar */
+        padding: 15px 10px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
     .sidebar-title {
-        margin-bottom: 0;
-        border-bottom: none;
+        margin-bottom: 15px; /* Espacio debajo del saludo */
         padding-left: 0;
+        text-align: center;
     }
 
-    .sidebar-nav, .nav-item.logout {
-        display: none; /* Oculta la nav en móvil para ahorrar espacio */
+    /* HACEMOS VISIBLE Y REESTRUCTURAMOS EL MENÚ DE NAVEGACIÓN */
+    .sidebar-nav {
+        display: flex; /* Muestra el menú */
+        flex-direction: row; /* **Clave:** Botones en línea */
+        flex-wrap: wrap; /* Permite que los botones se envuelvan si es necesario */
+        gap: 10px; /* Espacio entre botones */
+        margin-bottom: 0;
+        justify-content: center; /* Centra los botones horizontalmente */
     }
     
-    .new-appointment-btn {
-        margin-top: 0;
+    .nav-item {
+        /* Adaptamos los botones para que se vean como chips o bloques pequeños */
+        padding: 8px 15px; 
+        text-align: center;
+        width: auto; 
+        border-radius: 6px; 
+        margin-bottom: 0;
+    }
+    
+    /* Aseguramos que los botones ocultos ahora se muestren */
+    .nav-item, .nav-item.logout {
+        display: block; /* Asegura que todos los elementos se muestren */
+        padding: 8px 15px;
     }
 
+    /* Adaptamos el botón de Agendar para que se vea bien en línea */
+    .nav-item-schedule {
+        margin: 0 0 0 0 !important; /* Elimina los márgenes verticales grandes */
+        order: -1; /* Opcional: lo mueve al inicio de la lista de botones */
+    }
+    
+    .nav-item.logout {
+        margin-top: 0;
+        order: 99; /* Opcional: lo envía al final */
+        /* Eliminamos el fondo de hover para que no interfiera con el diseño lineal */
+        background-color: transparent !important;
+        color: var(--text-color-dark) !important;
+    }
+    
+    .nav-item.logout:hover {
+        background-color: #f8f9fa !important;
+        color: #dc3545 !important;
+    }
+
+
     .dashboard-content {
-        padding: 20px;
+        padding: 20px 10px; /* Reduce el padding horizontal del contenido */
     }
 
     .content-grid {
