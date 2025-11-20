@@ -7,6 +7,7 @@
 
 /* --- ESTILOS GENERALES Y VARIABLES --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+US+Trad+Guides&display=swap');
 
 :root {
     --color-pink-light: #FFB3D4;
@@ -79,11 +80,25 @@ body {
 }
 
 #main-title {
-    font-size: 1.6em; /* Reducido */
-    font-weight: 800;
+    font-size: 1.3rem; /* Reducido */
+    font-weight: 600;
     line-height: 1.25;
-    margin-bottom: 20px; /* Reducido */
-    color: #F06292;
+    margin-bottom: 40px; /* Reducido */
+    color: rgba(0, 0, 0, 0.76);
+}
+
+#here {
+     font-family: cursive;
+     font-weight: 800;
+     font-style: normal;
+     font-size: 2.25rem;
+     margin-bottom: 50px;
+     color: #c645b9;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 20px;
 }
 
 .register-form {    

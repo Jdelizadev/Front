@@ -47,6 +47,7 @@ const Login = () => {
 
             setEmail('');
             setPassword('');
+            setMessage('Bienvenido')
       localStorage.setItem('jwt', token);
       localStorage.setItem('userName', userName);
       localStorage.setItem('userID', userID);
@@ -67,11 +68,12 @@ const Login = () => {
 
       {/* 3. Envuelve el formulario en la tarjeta principal */}
       <div className="register-card">
-        <h1 className="text">Aquí comienza tu lugar seguro <br/></h1>
-        <h1 id='.main-title' className=".main-title">Accede</h1>
+        <p id='here'>Aquí comienza tu lugar seguro <br/></p>
+
+        {/* <h1 id='main-title' className=".main-title">Accede</h1> */}
 
         {/* 4. Usa la clase del título principal */}
-        <p className="text">Inicia sesión para continuar</p>
+        <p id='main-title' className="text">Inicia sesión para continuar</p>
 
         <form className="register-form" onSubmit={handleSubmit}>
           {error && <p className="error-message">{error}</p>}

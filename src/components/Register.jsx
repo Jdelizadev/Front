@@ -1,6 +1,6 @@
 // src/components/Register.jsx
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link , useNavigate  } from 'react-router-dom';
+import { useState} from 'react';
 import './StylesLoginAndRegister.css'; // Asegúrate de que la ruta sea correcta
 const API_REGISTER_URL = import.meta.env.VITE_API_URL + '/auth/register'
 
@@ -12,6 +12,7 @@ const Register = () => {
     const [fechaNacimiento, setFechaNacimiento] = useState('');
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -52,7 +53,7 @@ const Register = () => {
             
             // Mostrar mensaje de éxito
             setMessage('¡Registro completado! Ya puedes iniciar sesión!');
-
+            navigate('/', { replace: true})
 
         } catch (error) {
             console.error('Error de red o en la solicitud:', error);

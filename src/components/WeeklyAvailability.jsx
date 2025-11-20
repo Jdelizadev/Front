@@ -69,7 +69,7 @@ const WeeklyAvailability = React.forwardRef(({ onAppointmentChange }, ref) => {
                 try {
                     const errorData = await response.json();
                     errorMessage = errorData.message || errorMessage;
-                } catch (e) { }
+                } catch (e) { console.log(e) }
                 throw new Error(errorMessage);
             }
 

@@ -19,7 +19,7 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
         try {
             const date = new Date(`2000-01-01T${timeBlockStart}`);
             return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-        } catch (e) { return 'N/A'; }
+        } catch (e) {console.log(e); return 'N/A'; }
     };
 
     /**
@@ -42,6 +42,7 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
             }
             return safeDate.toLocaleDateString('es-ES', options);
         } catch (e) {
+            console.log(e)
             return 'N/A';
         }
     };
@@ -164,7 +165,8 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
                             </div>
 
                             <div className="appointment-details">
-                                <h3>Cita #{cita.id}</h3>
+                                {/* #{cita.id} */}
+                                <h3>Cita </h3>
                                 <p><Clock size={14} style={{ marginRight: '5px' }} /> Hora: {formatTime(cita.timeBlock.startTime)}</p> 
                                 <p className="status-confirmada">Confirmada</p> 
                             </div>
