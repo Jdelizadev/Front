@@ -204,7 +204,7 @@ body {
     .register-page-container {
     display: grid;
     place-items: center;
-    height: 85vh;
+    height: 75vh;
     width: 100%;
     position: relative;
     overflow: hidden;
