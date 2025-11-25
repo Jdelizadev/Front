@@ -103,7 +103,7 @@ const DashBoard = () => {
             {/* 1. Barra Lateral - Sidebar */}
             <aside className="dashboard-sidebar">
                 <div style={{ paddingLeft: '10px' }}>
-                    <h2 className="sidebar-title">👋 Hola, {userName}</h2>
+                    <h2 className="sidebar-title">👋 Bienvenid@, {userName}</h2>
                 </div>
                 
                 <nav className="sidebar-nav">
