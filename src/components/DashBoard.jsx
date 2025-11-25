@@ -16,7 +16,8 @@ const DashBoard = () => {
     const navigate = useNavigate()
     // Simulación de datos del usuario
     const n = localStorage.getItem('userName');
-    const userName = capitalizeName(n);
+    const userN = capitalizeName(n);
+    const userName = userN.split(' ')[0]
 
     // 💡 CLAVE: Estado para controlar la vista actual
     const [activeView, setActiveView] = useState(VIEWS.MAIN);
