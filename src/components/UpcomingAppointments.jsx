@@ -166,7 +166,7 @@ const UpcomingAppointments = React.forwardRef(({ onAppointmentChange }, ref) => 
 
                             <div className="appointment-details">
                                 {/* #{cita.id} */}
-                                <h3>Cita </h3>
+                                <h3>Cita: </h3>
                                 <p><Clock size={14} style={{ marginRight: '5px' }} /> Hora: {formatTime(cita.timeBlock.startTime)}</p> 
                                 <p className="status-confirmada">Confirmada</p> 
                             </div>

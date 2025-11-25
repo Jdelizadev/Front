@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-// Asegúrate de importar los mismos estilos del registro
+import { useReducer } from 'react';
 import './StylesLoginAndRegister.css'; 
 
 const API_LOGIN_URL = import.meta.env.VITE_API_URL + '/auth/login' 
@@ -8,21 +7,42 @@ const API_LOGIN_URL = import.meta.env.VITE_API_URL + '/auth/login'
 const Login = () => {
   const navigate = useNavigate()
 
-  // Estados para el email y la contraseña (esto no cambia)
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  // La función handleSubmit tampoco necesita cambios
+  const {email, password, error, message} = state
+
+  //action methods
+
+  const setError = (payload) => {
+    dispatch({type: Error, payload: payload})
+  }
+
+  const setSuccess = (payload, {token, userName, userID}) => {
+    dispatch({type: Success, payload: payload})
+
+      localStorage.setItem('jwt', token);
+      localStorage.setItem('userName', userName);
+      localStorage.setItem('userID', userID);
+      navigate('/dashboard', { replace: true})
+  }
+
+  const setEmail = ({target: {value}}) => {
+    dispatch({ type: Email, payload: value})
+  }
+
+  const setPassword = ({target: {value}}) => {
+    dispatch({ type: Password, payload: value})
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!email || !password) {
       setError('Por favor, ingresa tu email y contraseña.');
       return;
     }
     console.log('Intentando iniciar sesión con:', { email, password });
-    setError(''); 
+      setError(''); 
 
     try {
       const data = await fetch(API_LOGIN_URL, {
@@ -36,22 +56,17 @@ const Login = () => {
         })
       })
 
-      if (data.status == 400) {
-        setError('Usuario no registrado');
-        return;
-      }
-      const response = await data.json()
-      console.log(response)
-      const { token, userName, userID } = response
-      console.log(token, userName, userID)
+        if (!data.ok) {
+          const errorResponse = await data.json().catch(() => ({ message: 'Error desconocido' }));
 
-            setEmail('');
-            setPassword('');
-            setMessage('Bienvenido')
-      localStorage.setItem('jwt', token);
-      localStorage.setItem('userName', userName);
-      localStorage.setItem('userID', userID);
-      navigate('/dashboard', { replace: true})                  
+          const errorMessage = errorResponse.message || (data.status === 400 ? 'Usuario o contraseña incorrectos.' : `Error: ${data.status}`);
+
+          setError(errorMessage);
+          return;
+        }
+      const response = await data.json()
+    
+      setSuccess('Bienvenido',response)
 
     } catch (error) {
       console.log(error)
@@ -60,19 +75,13 @@ const Login = () => {
   };
 
   return (
-    // 1. Usa el contenedor principal de la página
     <div className="register-page-container">
       
-      {/* 2. Añade el ícono de fondo */}
       <div className="gender-icon-background"></div>
 
-      {/* 3. Envuelve el formulario en la tarjeta principal */}
       <div className="register-card">
         <p id='here'>Aquí comienza tu lugar seguro <br/></p>
 
-        {/* <h1 id='main-title' className=".main-title">Accede</h1> */}
-
-        {/* 4. Usa la clase del título principal */}
         <p id='main-title' className="text">Inicia sesión para continuar</p>
 
         <form className="register-form" onSubmit={handleSubmit}>
@@ -80,7 +89,6 @@ const Login = () => {
           {message && <p className="success-message">{message}</p>}
           
           <div className="form-group">
-            {/* 5. Usa las clases correctas para label e input */}
             <label className="input-label" htmlFor="email">Email</label>
             <input
               className="input-field"
@@ -88,15 +96,11 @@ const Login = () => {
               id="email"
               placeholder="tu.email@ejemplo.com"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setError('');
-              }}
+              onChange={setEmail}
             />
           </div>
           
           <div className="form-group">
-            {/* 5. Usa las clases correctas para label e input */}
             <label className="input-label" htmlFor="password">Contraseña</label>
             <input
               className="input-field"
@@ -104,19 +108,14 @@ const Login = () => {
               id="password"
               placeholder="********"
               value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setError('');
-              }}
+              onChange={setPassword}
             />
           </div>
           
-          {/* 6. Usa la misma clase del botón de registro */}
           <button type="submit" className="register-button">
             Iniciar Sesión
           </button>
 
-          {/* 7. Usa la misma clase para el texto del enlace */}
           <p className="login-text">
             ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
           </p>
@@ -127,3 +126,49 @@ const Login = () => {
 };
 
 export { Login };
+
+const initialState = {
+  email: '',
+  password: '',
+  error: '',
+  message: '',
+  succes: false
+}
+
+const actionTypes = {
+    Error : 'Error',
+    Email: 'Email',
+    Password: 'Password',
+    Message: 'Message',
+    Success: 'Succes'
+} 
+
+const { Error, Email, Password, Message, Success } = actionTypes
+
+const reduceObject = (state, payload) => ({
+  [Error]: {
+    ...state,
+    error: payload
+  },
+  [Email]: {
+    ...state,
+    error: '',
+    email: payload
+  },
+  [Password]: {
+    ...state,
+    error: '',
+    password: payload
+  },
+  [Success]: {
+    ...state,
+    email: '',
+    password: '',
+    message: payload,
+    succes: true
+  } 
+})
+
+const reducer = (state,{type, payload}) => {
+  return reduceObject(state, payload)[type] || state
+}
